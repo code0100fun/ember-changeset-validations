@@ -5,25 +5,25 @@ import { module, test } from 'qunit';
 module('Unit | Validator | confirmation');
 
 test('it accepts an `on` option', function(assert) {
-  let changes = { password: '1234567' };
+  let model = { password: '1234567' };
   let key = 'passwordConfirmation';
   let opts = { on: 'password' };
   let validator = validateConfirmation(opts);
 
-  assert.equal(validator(key, undefined, undefined, changes), buildMessage(key, { type: 'confirmation', context: opts }));
-  assert.equal(validator(key, null, undefined, changes), buildMessage(key, { type: 'confirmation', context: opts }));
-  assert.equal(validator(key, '', undefined, changes), buildMessage(key, { type: 'confirmation', context: opts }));
-  assert.equal(validator(key, '1234567', undefined, changes), true);
+  assert.equal(validator(key, undefined, undefined, undefined, model), buildMessage(key, { type: 'confirmation', context: opts }));
+  assert.equal(validator(key, null, undefined, undefined, model), buildMessage(key, { type: 'confirmation', context: opts }));
+  assert.equal(validator(key, '', undefined, undefined, model), buildMessage(key, { type: 'confirmation', context: opts }));
+  assert.equal(validator(key, '1234567', undefined, undefined, model), true);
 });
 
 test('it can output custom message string', function(assert) {
-  let changes = { password: '1234567' };
+  let model = { password: '1234567' };
   let key = 'passwordConfirmation';
   let opts = { on: 'password', message: '{description} is not equal to {on}' };
   let validator = validateConfirmation(opts);
 
   assert.equal(
-    validator(key, undefined, undefined, changes),
+    validator(key, undefined, undefined, undefined, model),
     'Password confirmation is not equal to password',
     'custom message string is generated correctly'
   );
@@ -32,7 +32,7 @@ test('it can output custom message string', function(assert) {
 test('it can output with custom message function', function(assert) {
   assert.expect(5);
 
-  let changes = { password: '1234567' };
+  let model = { password: '1234567' };
   let key = 'passwordConfirmation';
   let opts = {
     on: 'password',
@@ -48,7 +48,7 @@ test('it can output with custom message function', function(assert) {
   let validator = validateConfirmation(opts);
 
   assert.equal(
-    validator(key, 'testValue', undefined, changes),
+    validator(key, 'testValue', undefined, undefined, model),
     'some test message',
     'custom message function is returned correctly'
   );
